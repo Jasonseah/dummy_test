@@ -36,10 +36,10 @@ jobs:
           DB_PASSWORD:
         run: vendor/bin/phpunit
       - name: Coverage check
-          uses: devmasx/coverage-check-action@v1.2.0
-          with:
-            type: simplecov
-            token: ${{ github.token }}
-            min_coverage: 80
-            result_path: coverage/.last_run.json
+        uses: devmasx/coverage-check-action@v1.2.0
+        with:
+          type: simplecov
+          token: ${{ github.token }}
+          min_coverage: 80
+          result_path: coverage/.last_run.json
 
