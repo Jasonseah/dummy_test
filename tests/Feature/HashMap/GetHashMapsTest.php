@@ -53,7 +53,7 @@ class GetHashMapsTest extends TestCase
                 'data' => []
             ]);
     }
-    
+
     public function test_unable_to_get_hash_map_by_timestamp_when_key_is_incorrect()
     {
         $hashFactoryData = HashMap::factory()->create();
