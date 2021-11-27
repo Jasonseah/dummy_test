@@ -2,29 +2,26 @@ name: Laravel
 on: [ push ]
 
 jobs:
-  laravel-tests:
+  tests:
     runs-on: ubuntu-latest
+    container: sail-8.0/app
+    services:
+      postgres:
+        image: postgres:13-alpine
+          environment:
+            - POSTGRES_DB=interview_app
+            - POSTGRES_PASSWORD=password
     steps:
-      - uses: sail-8.0/app
-      - uses: actions/checkout@v2
+      - name: Check out current repository
+        uses: actions/checkout@v2
       - name: Copy .env
         run: php -r "copy('.env.example', '.env');"
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate key
         run: php artisan key:generate
-      - name: Directory Permissions
+      - name: Update Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
-      - name: Setup Postgres CLI
-          uses: akanieski/setup-postgres-cli@v0.1.2
-          with:
-            commands: |
-              psql -U user -h 127.0.0.1 -p 5432
-            password: password
-      - name: Create Database
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           WWWUSER: '${WWWUSER}'
@@ -32,11 +29,11 @@ jobs:
           XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
           XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
           DB_CONNECTION: pgsql
-          DB_HOST: localhost
+          DB_HOST: postgres
           DB_PORT: 5432
           DB_DATABASE: interview_app
-          DB_USERNAME: user
-          DB_PASSWORD: password
+          DB_USERNAME: postgres
+          DB_PASSWORD:
         run: vendor/bin/phpunit
       - name: Coverage check
           uses: devmasx/coverage-check-action@v1.2.0
