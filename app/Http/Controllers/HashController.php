@@ -59,7 +59,9 @@ class HashController extends Controller
         $queryResults = (new HashMapRepository)->find($key, $allFilters);
 
         if ( !$queryResults) {
-            return response('no data found', 404);
+            return response()->json([
+                'data' => []
+            ]);
         }
 
         return new HashMapResources($queryResults);
