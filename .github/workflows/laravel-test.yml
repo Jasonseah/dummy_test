@@ -8,9 +8,9 @@ jobs:
     services:
       postgres:
         image: postgres:13-alpine
-          env:
-            POSTGRES_DB=interview_app
-            POSTGRES_PASSWORD=password
+        env:
+          POSTGRES_DB=interview_app
+          POSTGRES_PASSWORD=password
     steps:
       - name: Check out current repository
         uses: actions/checkout@v2
