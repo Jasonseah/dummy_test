@@ -15,6 +15,10 @@ jobs:
       - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
         with:
           php-version: '8.0'
+      - name: Setup database
+        run: psql -h postgres -U postgres_user -c 'CREATE DATABASE "test_db";'
+        env:
+          PGPASSWORD: postgres
       - name: Check out current repository
         uses: actions/checkout@v2
       - name: Copy .env
@@ -28,9 +32,9 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: pgsql
-          DB_HOST: localhost
+          DB_HOST: postgres
           DB_PORT: 5432
-          DB_DATABASE: postgres
+          DB_DATABASE: test_db
           DB_USERNAME: postgres
           DB_PASSWORD:
         run: |
