@@ -31,7 +31,7 @@ jobs:
           DB_PASSWORD:
         run: |
           ls -al
-          vendor/bin/phpunit
+          php artisan test
       - name: Coverage check
         uses: devmasx/coverage-check-action@v1.2.0
         with:
