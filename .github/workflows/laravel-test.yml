@@ -16,7 +16,7 @@ jobs:
         with:
           php-version: '8.0'
       - name: Setup database
-        run: psql -h postgres -U postgres_user -c 'CREATE DATABASE "test_db";'
+        run: psql -h localhost -U postgres_user -c 'CREATE DATABASE "test_db";'
         env:
           PGPASSWORD: postgres
       - name: Check out current repository
