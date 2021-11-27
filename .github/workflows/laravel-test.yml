@@ -31,7 +31,7 @@ jobs:
           DB_PASSWORD:
         run: |
           ls -al
-          php artisan test
+          php artisan test ./tests
       - name: Coverage check
         uses: devmasx/coverage-check-action@v1.2.0
         with:
