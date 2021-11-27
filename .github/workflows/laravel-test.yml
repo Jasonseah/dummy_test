@@ -23,17 +23,15 @@ jobs:
         run: chmod -R 777 storage bootstrap/cache
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
-          WWWUSER: '${WWWUSER}'
-          LARAVEL_SAIL: 1Dockerfile
-          XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-          XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
           DB_CONNECTION: pgsql
           DB_HOST: postgres
           DB_PORT: 5432
           DB_DATABASE: postgres
           DB_USERNAME: postgres
           DB_PASSWORD:
-        run: vendor/bin/phpunit
+        run: |
+          ls -al
+          vendor/bin/phpunit
       - name: Coverage check
         uses: devmasx/coverage-check-action@v1.2.0
         with:
