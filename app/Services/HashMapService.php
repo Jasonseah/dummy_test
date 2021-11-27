@@ -17,8 +17,10 @@ class HashMapService
             $hashMap = new HashMap();
         }
 
+        $value = $hashMapRequest->{key($hashMapRequest)};
+
         $hashMap->key = key($hashMapRequest);
-        $hashMap->value = json_encode($hashMapRequest->{key($hashMapRequest)});
+        $hashMap->value = is_string($value) ? $value : json_encode($value);
         $hashMap->save();
 
         return $hashMap;
