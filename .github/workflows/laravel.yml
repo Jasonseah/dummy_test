@@ -1,0 +1,66 @@
+name: Laravel
+on: [ push ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+      - uses: shivammathur/setup-php@15c43e89cdef867065b0213be354c2841860869e
+        with:
+          php-version: '8.0'
+
+      - name: Setup database
+        run: psql -h localhost -U postgres -c 'CREATE DATABASE "test_db";'
+        env:
+          PGPASSWORD: postgres
+
+      - name: Check out current repository
+        uses: actions/checkout@v2
+
+      - name: Copy .env
+        run: php -r "copy('.env.example', '.env');"
+
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Generate key
+        run: php artisan key:generate
+
+      - name: Update Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DB_CONNECTION: pgsql
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_DATABASE: test_db
+          DB_USERNAME: postgres
+          DB_PASSWORD: postgres
+        run: php artisan test ./tests --coverage-clover=coverage.xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          flags: tests
+          name: codecov-umbrella
+          yml: ./codecov.yml
+          fail_ci_if_error: true
