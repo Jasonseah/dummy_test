@@ -86,7 +86,6 @@ class CreateAndUpdateHashMapsTest extends TestCase
         ]);
     }
 
-
     public function test_create_fail_if_there_is_no_data()
     {
         $response = $this->withHeaders([
