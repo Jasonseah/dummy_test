@@ -12,32 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: interview-gke-test
+  name: gke-test-service
 spec:
-  replicas: 1
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 5000
   selector:
-    matchLabels:
-      app: interview-gke-test
-  strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
-  minReadySeconds: 5
-  template:
-    metadata:
-      labels:
-        app: interview-gke-test
-    spec:
-      containers:
-        - name: interview-app
-          image: gcr.io/PROJECT_ID/static-site/IMAGE:TAG
-          ports:
-            - containerPort: 8080
-          resources:
-            requests:
-              cpu: 100m
-            limits:
-              cpu: 100m
+    app: gke-test
