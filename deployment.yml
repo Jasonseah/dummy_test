@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: interview-app
-          image: gcr.io/google-samples/interview-app:1.0
+          image: gcr.io/feisty-rigging-333504/static-site:latest
           ports:
             - containerPort: 8080
           resources:
