@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: interview-app
-          image: gcr.io/${PROJECT_ID}/static-site:${COMMIT_SHA}
+          image: gcr.io/$PROJECT_ID/static-site:$GITHUB_SHA
           ports:
             - containerPort: 8080
           resources:
