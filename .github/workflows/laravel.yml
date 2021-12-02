@@ -39,8 +39,11 @@ jobs:
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      - name: Dump autoload
-        run: composer dump-autoload
+      - name: Clear config and cache
+        run: |
+          php artisan config:cache
+          php artisan config:clear
+          composer dump-autoload -o
 
       - name: Generate key
         run: php artisan key:generate
