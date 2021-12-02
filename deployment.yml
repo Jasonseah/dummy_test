@@ -36,10 +36,8 @@ spec:
           image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           ports:
             - containerPort: 80
-        - name: cloud-sql-proxy
-          image: gcr.io/cloudsql-docker/gce-proxy:1.17
-          command:
-            - "/cloud_sql_proxy"
-            - "-instances=feisty-rigging-333504:asia-southeast1:test-app=tcp:5432"
-          securityContext:
-            runAsNonRoot: true
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 100m
