@@ -5,31 +5,33 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\HashMap;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Services\HashMapService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\HashMapRequest;
 use App\Http\Resources\HashMapResources;
 use App\Repositories\HashMapRepository;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class HashController extends Controller
 {
     /**
-     * @return AnonymousResourceCollection
+     * @return JsonResponse
      */
-    public function index(): AnonymousResourceCollection
+    public function index(): JsonResponse
     {
-        return HashMapResources::collection(HashMap::all());
+        $hashResources = HashMapResources::collection(HashMap::all());
+
+        return custom_response(
+            $hashResources,
+            trans('general.retrieve.success', ['attribute' => 'hash map'])
+        );
     }
 
     /**
      * @param HashMapRequest $request
-     * @return Application|ResponseFactory|Response
+     * @return JsonResponse
      */
-    public function create(HashMapRequest $request): Response|Application|ResponseFactory
+    public function create(HashMapRequest $request): JsonResponse
     {
         DB::beginTransaction();
         try {
@@ -41,29 +43,28 @@ class HashController extends Controller
             DB::rollBack();
             $err = trans('general.create.fail', ['attribute' => 'hash map']);
 
-            return response($err, 400);
+            return custom_error_response($e->getTrace(), $err);
         }
 
 
-        return response(trans('general.create.success', ['attribute' => 'hash map']));
+        return custom_response([], trans('general.create.success', ['attribute' => 'hash map']));
     }
 
     /**
      * @param $key
      * @param Request $request
-     * @return HashMapResources
+     * @return JsonResponse
      */
-    public function show($key, Request $request)
+    public function show($key, Request $request): JsonResponse
     {
         $allFilters = $request->only(['timestamp']);
         $queryResults = (new HashMapRepository)->find($key, $allFilters);
 
-        if ( !$queryResults) {
-            return response()->json([
-                'data' => []
-            ]);
-        }
+        $hashMapResources = $queryResults ? new HashMapResources($queryResults) : (object) [];
 
-        return new HashMapResources($queryResults);
+        return custom_response(
+            $hashMapResources,
+            trans('general.retrieve.success', ['attribute' => 'hash map'])
+        );
     }
 }

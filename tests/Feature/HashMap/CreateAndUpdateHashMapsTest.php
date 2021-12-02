@@ -25,10 +25,7 @@ class CreateAndUpdateHashMapsTest extends TestCase
             $key = $prefixKey;
         }
 
-        $mockData = new StdClass();
-        $mockData->{$key} = $mockHashMap->value;
-
-        return $mockData;
+        return (object) [$key => $mockHashMap->value];
     }
 
     public function test_create_hash_map()
@@ -70,8 +67,7 @@ class CreateAndUpdateHashMapsTest extends TestCase
         $existingHashMap = HashMap::factory()->create();
         $mockInput = $this->makeMockInput($existingHashMap->key);
 
-        $valueObject = new StdClass();
-        $valueObject->{'123'} = Str::random(20);
+        $valueObject = (object) ['123' => Str::random(20)];
         $mockInput->{$existingHashMap->key} = json_encode($valueObject);
 
         $response = $this->post('/api/hash', [

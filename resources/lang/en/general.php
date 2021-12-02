@@ -16,6 +16,13 @@ return [
     'create' => [
         'fail'  => 'unable to create :attribute.',
         'success' => 'The :attribute created successfully.',
+    ],
+
+    'retrieve' => [
+        'fail'  => 'unable to retrieve :attribute, please try again later.',
+        'success' => 'Retrieve :attribute successfully.',
     ]
+
+
 
 ];
