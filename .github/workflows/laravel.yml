@@ -41,8 +41,6 @@ jobs:
 
       - name: Clear config and cache
         run: |
-          php artisan config:cache
-          php artisan config:clear
           composer dump-autoload -o
 
       - name: Generate key
