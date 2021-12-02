@@ -36,12 +36,6 @@ spec:
           image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           ports:
             - containerPort: 80
-          resources:
-            requests:
-              cpu: 100m
-            limits:
-              cpu: 100m
-
         - name: cloud-sql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.17
           command:
@@ -49,7 +43,3 @@ spec:
             - "-instances=test-app=tcp:5432"
           securityContext:
             runAsNonRoot: true
-          resources:
-            requests:
-              memory: "2Gi"
-              cpu: "1"
