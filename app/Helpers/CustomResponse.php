@@ -1,6 +1,8 @@
 <?php
 
-function custom_response($data = [], $message, $code = 200)
+use Illuminate\Http\JsonResponse;
+
+function custom_response($message, $data = [], $code = 200): JsonResponse
 {
     $jsonObject = [
         "message" => $message,
@@ -11,7 +13,7 @@ function custom_response($data = [], $message, $code = 200)
 }
 
 
-function custom_error_response($err_trace = [], $message, $code = 400)
+function custom_error_response($message, $err_trace = [], $code = 400): JsonResponse
 {
     Log::error('Something is really going wrong.', $err_trace);
 

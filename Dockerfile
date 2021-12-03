@@ -44,8 +44,8 @@ COPY --chown=www:www-data . /var/www
 RUN chmod -R ug+w /var/www/storage
 
 # Copy nginx/php/supervisor configs
-RUN cp development/supervisor.conf /etc/supervisord.conf
-RUN cp development/nginx.conf /etc/nginx/sites-enabled/default
+RUN cp deployment/config/supervisor.conf /etc/supervisord.conf
+RUN cp deployment/config/nginx.conf /etc/nginx/sites-enabled/default
 
 # PHP Error Log Files
 RUN mkdir /var/log/php
@@ -53,13 +53,8 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
 # Deployment steps
 RUN composer install --optimize-autoloader --no-dev
-
-RUN cd /var/www
-RUN php artisan cache:clear
-RUN php artisan route:cache
-
-RUN chmod +x /var/www/development/run.sh
+RUN chmod +x /var/www/deployment/scripts/run.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["/var/www/development/run.sh"]
+ENTRYPOINT ["/var/www/deployment/scripts/run.sh"]

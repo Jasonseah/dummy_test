@@ -22,8 +22,8 @@ class HashController extends Controller
         $hashResources = HashMapResources::collection(HashMap::all());
 
         return custom_response(
-            $hashResources,
-            trans('general.retrieve.success', ['attribute' => 'hash map'])
+            trans('general.retrieve.success', ['attribute' => 'hash map']),
+            $hashResources
         );
     }
 
@@ -43,11 +43,11 @@ class HashController extends Controller
             DB::rollBack();
             $err = trans('general.create.fail', ['attribute' => 'hash map']);
 
-            return custom_error_response($e->getTrace(), $err);
+            return custom_error_response($err, $e->getTrace());
         }
 
 
-        return custom_response([], trans('general.create.success', ['attribute' => 'hash map']));
+        return custom_response(trans('general.create.success', ['attribute' => 'hash map']));
     }
 
     /**
@@ -63,8 +63,8 @@ class HashController extends Controller
         $hashMapResources = $queryResults ? new HashMapResources($queryResults) : (object) [];
 
         return custom_response(
-            $hashMapResources,
-            trans('general.retrieve.success', ['attribute' => 'hash map'])
+            trans('general.retrieve.success', ['attribute' => 'hash map']),
+            $hashMapResources
         );
     }
 }
