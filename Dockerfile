@@ -54,6 +54,7 @@ RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 # Deployment steps
 RUN composer install --optimize-autoloader --no-dev
 RUN chmod +x /var/www/deployment/scripts/run.sh
+RUN cp .env.example .env
 
 EXPOSE 80
 
