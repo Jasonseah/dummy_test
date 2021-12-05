@@ -37,9 +37,6 @@ spec:
           envFrom:
             - secretRef:
                 name: laravel-env
-          env:
-            - name: DB_HOST
-              value: 31.111.111.111
           ports:
             - containerPort: 80
           resources:
