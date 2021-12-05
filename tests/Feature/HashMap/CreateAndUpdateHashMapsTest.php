@@ -118,4 +118,23 @@ class CreateAndUpdateHashMapsTest extends TestCase
         $this->assertDatabaseCount('hash_map', 0);
     }
 
+    public function test_create_fail_if_the_key_is_int()
+    {
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+        ])->post('/api/object', [
+            "123"  => Str::random(10),
+        ]);
+
+        $response->assertStatus(422)
+            ->assertJson([
+                "message" => "The given data was invalid.",
+                "errors"  => [
+                    ["Object key are not allow to be integer, or the value are not able to convert to int"]
+                ]
+            ]);
+
+        $this->assertDatabaseCount('hash_map', 0);
+    }
+
 }

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\HashMapRequest;
 use App\Http\Resources\HashMapResources;
 use App\Repositories\HashMapRepository;
-use Illuminate\Validation\ValidationException;
 
 class HashController extends Controller
 {
@@ -31,16 +30,9 @@ class HashController extends Controller
     /**
      * @param HashMapRequest $request
      * @return JsonResponse
-     * @throws ValidationException
      */
     public function create(HashMapRequest $request): JsonResponse
     {
-        // hence in request is unable to check if request is empty and return a validation error
-        // so we have to be ugly and make it here
-        if (count($request->all()) < 1) {
-            throw ValidationException::withMessages([trans('validation.custom.must_have_at_least_one_object')]);
-        }
-
         DB::beginTransaction();
         try {
             (new HashMapService)->storeOrEdit($request->all());

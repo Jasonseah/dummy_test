@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Rules\ObjectOrString;
 use App\Rules\OnlyOneJsonAllow;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\ValidationException;
 
 class HashMapRequest extends FormRequest
 {
@@ -25,12 +26,23 @@ class HashMapRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
+     * @throws ValidationException
      */
     public function rules(): array
     {
+        // check if request is empty and return a validation error
+        if (count($this->request->all()) < 1) {
+            throw ValidationException::withMessages([trans('validation.custom.must_have_at_least_one_object')]);
+        }
+
         $rule = [];
         foreach ($this->request->all() as $key => $value) {
-            $rule[ $key ] = [
+            // check if the value is int will return error
+            if (is_int($key)){
+                throw ValidationException::withMessages([trans('validation.custom.must_be_a_valid_string')]);
+            }
+
+            $rule["$key"] = [
                 'required',
                 new OnlyOneJsonAllow($this->request->all()),
                 new ObjectOrString
