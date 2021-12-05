@@ -36,9 +36,7 @@ spec:
           image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
           envFrom:
             - secretRef:
-                name: interview-db
-            - configMapRef:
-                name: laravel-env
+                name: interview-laravel-app
           ports:
             - containerPort: 80
           resources:
