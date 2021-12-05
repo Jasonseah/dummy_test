@@ -46,7 +46,6 @@ class HashController extends Controller
             return custom_error_response($err, $e->getTrace());
         }
 
-
         return custom_response(trans('general.create.success', ['attribute' => 'hash map']));
     }
 
