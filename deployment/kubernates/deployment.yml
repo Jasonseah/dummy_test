@@ -34,21 +34,9 @@ spec:
       containers:
         - name: interview-app
           image: LOCATION-docker.pkg.dev/PROJECT_ID/REPOSITORY/IMAGE:TAG
-          env:
-            - name: APP_KEY
-              value: projects/98374884677/secrets/Laravel_App_Key/versions/1
-            - name: DB_DATABASE
-              value: ${DB_DATABASE}
-            - name: DB_USERNAME
-              value: ${DB_USERNAME}
-            - name: DB_HOST
-              value: ${DB_HOST}
-            - name: DB_PASSWORD
-              value: ${DB_PASSWORD}
-            - name: APP_DEBUG
-              value: false
-            - name: APP_ENV
-              value: production
+          envFrom:
+            - secretRef:
+              name: laravel-env
           ports:
             - containerPort: 80
           resources:
