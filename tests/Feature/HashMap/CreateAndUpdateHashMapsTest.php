@@ -14,9 +14,9 @@ class CreateAndUpdateHashMapsTest extends TestCase
 
     /**
      * @param null $prefixKey
-     * @return StdClass
+     * @return array
      */
-    public function makeMockInput($prefixKey = null): StdClass
+    public function makeMockInput($prefixKey = null): array
     {
         $mockHashMap = HashMap::factory()->make();
 
@@ -25,22 +25,18 @@ class CreateAndUpdateHashMapsTest extends TestCase
             $key = $prefixKey;
         }
 
-        return (object) [$key => $mockHashMap->value];
+        return [$key => json_decode($mockHashMap->value)];
     }
 
     public function test_create_hash_map()
     {
         $mockInput = $this->makeMockInput();
 
-        $response = $this->post('/api/hash', [
-            "data" => json_encode($mockInput)
-        ]);
-
+        $response = $this->post('/api/object', $mockInput);
         $response->assertStatus(200);
-
         $this->assertDatabaseHas('hash_map', [
             'key'   => key($mockInput),
-            'value' => $mockInput->{key($mockInput)},
+            'value' => json_encode($mockInput[ key($mockInput) ]),
         ]);
     }
 
@@ -49,15 +45,11 @@ class CreateAndUpdateHashMapsTest extends TestCase
         $existingHashMap = HashMap::factory()->create();
         $mockInput = $this->makeMockInput($existingHashMap->key);
 
-        $response = $this->post('/api/hash', [
-            "data" => json_encode($mockInput)
-        ]);
-
+        $response = $this->post('/api/object', $mockInput);
         $response->assertStatus(200);
-
         $this->assertDatabaseHas('hash_map', [
             'key'   => $existingHashMap->key,
-            'value' => $mockInput->{$existingHashMap->key},
+            'value' => json_encode($mockInput[ key($mockInput) ]),
         ]);
     }
 
@@ -67,18 +59,13 @@ class CreateAndUpdateHashMapsTest extends TestCase
         $existingHashMap = HashMap::factory()->create();
         $mockInput = $this->makeMockInput($existingHashMap->key);
 
-        $valueObject = (object) ['123' => Str::random(20)];
-        $mockInput->{$existingHashMap->key} = json_encode($valueObject);
-
-        $response = $this->post('/api/hash', [
-            "data" => json_encode($mockInput)
-        ]);
+        $mockInput[ $existingHashMap->key ] = ['123' => Str::random(20)];
+        $response = $this->post('/api/object', $mockInput);
 
         $response->assertStatus(200);
-
         $this->assertDatabaseHas('hash_map', [
             'key'   => $existingHashMap->key,
-            'value' => $mockInput->{$existingHashMap->key},
+            'value' => json_encode($mockInput[ $existingHashMap->key ]),
         ]);
     }
 
@@ -86,7 +73,7 @@ class CreateAndUpdateHashMapsTest extends TestCase
     {
         $response = $this->withHeaders([
             'Accept' => 'application/json',
-        ])->post('/api/hash', [
+        ])->post('/api/object', [
             "data" => null
         ]);
 
@@ -98,8 +85,9 @@ class CreateAndUpdateHashMapsTest extends TestCase
     {
         $response = $this->withHeaders([
             'Accept' => 'application/json',
-        ])->post('/api/hash', [
-            "data" => Str::random(10)
+        ])->post('/api/object', [
+            "data"  => Str::random(10),
+            "data2" => Str::random(10)
         ]);
 
         $response->assertStatus(422);

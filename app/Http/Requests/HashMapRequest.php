@@ -2,11 +2,19 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ObjectString;
+use App\Rules\ObjectOrString;
+use App\Rules\OnlyOneJsonAllow;
 use Illuminate\Foundation\Http\FormRequest;
 
 class HashMapRequest extends FormRequest
 {
+    /**
+     * Indicates whether validation should stop after the first rule failure.
+     *
+     * @var bool
+     */
+    protected $stopOnFirstFailure = true;
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -20,8 +28,15 @@ class HashMapRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'data' => ['required', new ObjectString]
-        ];
+        $rule = [];
+        foreach ($this->request->all() as $key => $value) {
+            $rule[ $key ] = [
+                'required',
+                new OnlyOneJsonAllow($this->request->all()),
+                new ObjectOrString
+            ];
+        }
+
+        return $rule;
     }
 }

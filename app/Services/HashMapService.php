@@ -12,15 +12,17 @@ class HashMapService
      */
     public function storeOrEdit($hashMapRequest): HashMap
     {
-        $hashMap = HashMap::find(key($hashMapRequest));
+        $key = key($hashMapRequest);
+        // First element's value
+        $value = reset($hashMapRequest);
+
+        $hashMap = HashMap::find($key);
         if ( !$hashMap) {
             $hashMap = new HashMap();
         }
 
-        $value = $hashMapRequest->{key($hashMapRequest)};
-
-        $hashMap->key = key($hashMapRequest);
-        $hashMap->value = is_string($value) ? $value : json_encode($value);
+        $hashMap->key = $key;
+        $hashMap->value = json_encode($value);
         $hashMap->save();
 
         return $hashMap;

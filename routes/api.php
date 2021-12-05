@@ -18,6 +18,6 @@ use App\Http\Controllers\HashController;
 //    return $request->user();
 //});
 
-Route::get('/hashes', [HashController::class, 'index']);
-Route::post('/hash', [HashController::class, 'create']);
-Route::get('/hash/{key}', [HashController::class, 'show']);
+Route::get('/object/get_all_records', [HashController::class, 'index']);
+Route::post('/object', [HashController::class, 'create']);
+Route::get('/object/{key}', [HashController::class, 'show']);

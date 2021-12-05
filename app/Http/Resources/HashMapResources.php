@@ -19,7 +19,7 @@ class HashMapResources extends JsonResource
     {
         return [
             'key'   => $this->key,
-            'value' => $this->value,
+            'value' => json_decode($this->value),
         ];
     }
 }

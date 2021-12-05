@@ -139,7 +139,8 @@ return [
     */
 
     'custom' => [
-        'object_string' => 'The :attribute must be a valid object',
+        'object_or_string' => 'The :attribute must be a valid object or string',
+        'only_one_json_is_allow' => 'This request only allow one object'
     ],
 
     /*

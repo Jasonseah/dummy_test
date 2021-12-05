@@ -23,7 +23,7 @@ class HashMapFactory extends Factory
     {
         return [
             'key'   => Str::random(10),
-            'value' => Str::random(10),
+            'value' => json_encode(Str::random(10)),
         ];
     }
 }

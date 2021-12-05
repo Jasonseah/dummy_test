@@ -12,7 +12,7 @@ class GetListOfHashMapsTest extends TestCase
 
     public function test_getting_a_list_of_empty_hash_map()
     {
-        $response = $this->get('/api/hashes');
+        $response = $this->get('/api/object/get_all_records');
 
         $response->assertStatus(200)
             ->assertJson([
@@ -25,14 +25,14 @@ class GetListOfHashMapsTest extends TestCase
     {
         $hashFactoryData = HashMap::factory(10)->create();
 
-        $response = $this->get('/api/hashes');
+        $response = $this->get('/api/object/get_all_records');
 
         $response->assertStatus(200)
             ->assertJson([
                 'data' => $hashFactoryData->map(function ($data) {
                     return [
                         'key'   => $data->key,
-                        'value' => $data->value
+                        'value' => json_decode($data->value)
                     ];
                 })->toArray()
             ]);

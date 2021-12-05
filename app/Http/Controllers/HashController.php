@@ -35,9 +35,7 @@ class HashController extends Controller
     {
         DB::beginTransaction();
         try {
-            (new HashMapService)->storeOrEdit(
-                json_decode($request->input('data'))
-            );
+            (new HashMapService)->storeOrEdit($request->all());
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
