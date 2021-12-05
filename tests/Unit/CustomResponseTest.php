@@ -14,7 +14,7 @@ class CustomResponseTest extends TestCase
 
         $testResponse = json_encode([
             'message' => 'test message',
-            'err'     => []
+            'errors'  => []
         ]);
 
         $this->assertJsonStringEqualsJsonString(json_encode($response), $testResponse);
@@ -29,7 +29,7 @@ class CustomResponseTest extends TestCase
 
         $testResponse = json_encode([
             'message' => 'test message',
-            'err'     => $exception->getTrace()
+            'errors'  => $exception->getTrace()
         ]);
 
         $this->assertJsonStringEqualsJsonString(json_encode($response), $testResponse);

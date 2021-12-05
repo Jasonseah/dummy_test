@@ -90,7 +90,31 @@ class CreateAndUpdateHashMapsTest extends TestCase
             "data2" => Str::random(10)
         ]);
 
-        $response->assertStatus(422);
+        $response->assertStatus(422)
+            ->assertJson([
+                'message' => "The given data was invalid.",
+                "errors"   => [
+                    "data" => ["This request only allow one object"]
+                ]
+            ]);
+
+        $this->assertDatabaseCount('hash_map', 0);
+    }
+
+    public function test_create_fail_if_the_data_is_empty()
+    {
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+        ])->post('/api/object', []);
+
+        $response->assertStatus(422)
+            ->assertJson([
+                "message" => "The given data was invalid.",
+                "errors"  => [
+                    ["This request is require at least one object"]
+                ]
+            ]);
+
         $this->assertDatabaseCount('hash_map', 0);
     }
 
