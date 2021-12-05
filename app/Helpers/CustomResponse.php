@@ -22,7 +22,7 @@ function custom_error_response($message, $err_trace = [], $code = 400): JsonResp
     ];
 
     if (app()->env !== 'production') {
-        $jsonObject['err'] = $err_trace;
+        $jsonObject['errors'] = $err_trace;
     }
 
     return response()->json($jsonObject, $code);

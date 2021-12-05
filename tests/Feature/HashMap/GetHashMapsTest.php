@@ -16,7 +16,9 @@ class GetHashMapsTest extends TestCase
     {
         $hashFactoryData = HashMap::factory()->create();
         $key = $hashFactoryData->key;
-        $response = $this->get("/api/hash/$key");
+        $response = $this->get("/api/object/$key");
+
+        $hashFactoryData->value = json_decode($hashFactoryData->value);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -30,8 +32,9 @@ class GetHashMapsTest extends TestCase
         $hashFactoryData = HashMap::factory()->create();
         $key = $hashFactoryData->key;
         $timestamp = (new Carbon($hashFactoryData->created_at))->timestamp;
+        $response = $this->get("/api/object/$key?timestamp=$timestamp");
 
-        $response = $this->get("/api/hash/$key?timestamp=$timestamp");
+        $hashFactoryData->value = json_decode($hashFactoryData->value);
 
         $response->assertStatus(200)
             ->assertJson([
@@ -46,7 +49,7 @@ class GetHashMapsTest extends TestCase
         $key = $hashFactoryData->key;
         $timestamp = (new Carbon($hashFactoryData->created_at))->addHour()->timestamp;
 
-        $response = $this->get("/api/hash/$key?timestamp=$timestamp");
+        $response = $this->get("/api/object/$key?timestamp=$timestamp");
 
         $response->assertStatus(200)
             ->assertJson([
@@ -60,7 +63,7 @@ class GetHashMapsTest extends TestCase
         $key = Str::Random(10);
         $timestamp = (new Carbon($hashFactoryData->created_at))->addHour()->timestamp;
 
-        $response = $this->get("/api/hash/$key?timestamp=$timestamp");
+        $response = $this->get("/api/object/$key?timestamp=$timestamp");
 
         $response->assertStatus(200)
             ->assertJson([

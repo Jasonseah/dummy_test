@@ -4,7 +4,7 @@ namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class ObjectString implements Rule
+class ObjectOrString implements Rule
 {
     /**
      * Determine if the validation rule passes.
@@ -15,7 +15,8 @@ class ObjectString implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        return is_object(json_decode($value));
+        // is array is because if pass as json it will be automated become json
+        return is_array($value) || is_string($value);
     }
 
     /**
@@ -25,6 +26,6 @@ class ObjectString implements Rule
      */
     public function message(): string
     {
-        return trans('validation.custom.object_string');
+        return trans('validation.custom.object_or_string');
     }
 }
