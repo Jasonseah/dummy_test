@@ -51,11 +51,8 @@ RUN cp deployment/config/nginx.conf /etc/nginx/sites-enabled/default
 RUN mkdir /var/log/php
 RUN touch /var/log/php/errors.log && chmod 777 /var/log/php/errors.log
 
-# Deployment steps
-RUN composer install --optimize-autoloader --no-dev
-RUN chmod +x /var/www/deployment/scripts/run.sh
-RUN cp .env.example .env
+RUN chmod +x /var/www/deployment/scripts/dev-run.sh
 
 EXPOSE 80
 
-ENTRYPOINT ["sh", "/var/www/deployment/scripts/run.sh"]
+ENTRYPOINT ["sh", "/var/www/deployment/scripts/dev-run.sh"]
