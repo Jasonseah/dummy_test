@@ -1,29 +1,19 @@
 # For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    laravel:
         container_name: laravel
         build:
-            context: ./vendor/laravel/sail/runtimes/8.0
-            dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
-        image: sail-8.0/app
-        extra_hosts:
-            - 'host.docker.internal:host-gateway'
+            context: .
+            dockerfile: ./Dockerfile.dev
         ports:
             - '${APP_PORT:-80}:80'
-        environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1Dockerfile
-            XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
-            XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
-            - '.:/var/www/html'
+            - '.:/var/www/'
         depends_on:
             - pgsql
     pgsql:
-        container_name: psql
+        container_name: pgsql
         image: postgres:13-alpine
         environment:
             - POSTGRES_DB=interview_app
